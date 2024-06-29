@@ -10,7 +10,7 @@ import static com.neonlab.common.constants.GlobalConstants.CREATED_AT;
 @NoArgsConstructor
 public class PageableSearchCriteria {
 
-    private int perPage = 10;
+    private int perPage = 99999;
     private int pageNo = 1;
     private String sortBy = CREATED_AT;
     private Direction sortDirection = Direction.DESC;
