@@ -45,6 +45,7 @@ public class OrderService {
     private final AddressService addressService;
     private final SystemConfigService systemConfigService;
     private final PaymentRecordService paymentRecordService;
+    private final EmailServices emailService;
 
     @Transactional
     public OrderDto createOrder(OrderDto orderDto) throws InvalidInputException, ServerException, JsonParseException {
@@ -64,6 +65,9 @@ public class OrderService {
         order = orderRepository.save(order);
         orderDto = OrderDto.parse(order);
         setUpDtos(orderDto);
+        var emailData = emailService.setEmailData(orderDto);
+        emailService.sendOrderConfirmationEmail(emailData);
+        emailService.sendAdminNotificationEmail(emailData);
         return orderDto;
     }
 
@@ -106,10 +110,19 @@ public class OrderService {
 
     public OrderDto update(UpdateOrderRequest request) throws InvalidInputException, ServerException, JsonParseException {
         var order = fetchById(request.getId());
+        String previousStatus = order.getOrderStatus().toString();
         ObjectMapperUtils.map(request, order);
         order = orderRepository.save(order);
         var retVal = OrderDto.parse(order);
         setUpDtos(retVal);
+        var emailData = emailService.setEmailData(retVal);
+        emailData.setPreviousStatus(previousStatus);
+        if(Objects.equals(retVal.getOrderStatus(),OrderStatus.CANCELED)) {
+            emailService.sendAdminOrderCancellationEmail(emailData);
+            emailService.sendOrderCancellationEmailToUser(emailData);
+        }else {
+            emailService.sendOrderStatusUpdateEmail(emailData);
+        }
        return retVal;
     }
 
@@ -259,5 +272,4 @@ public class OrderService {
         setUpDtos(orderDto);
         return orderDto;
     }
-
 }

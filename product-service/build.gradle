@@ -53,6 +53,9 @@ dependencies {
 	implementation 'org.hibernate.validator:hibernate-validator:7.0.1.Final'
 
 	implementation 'com.github.imagekit-developer:imagekit-java:2.0.0'
+
+	//email
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
 tasks.named('test') {
