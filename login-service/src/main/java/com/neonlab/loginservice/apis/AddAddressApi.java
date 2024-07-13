@@ -55,11 +55,10 @@ public class AddAddressApi {
         if(StringUtil.isNullOrEmpty(addressDto.getState())){
             throw new InvalidInputException("State is not provided");
         }
-        if(!addressService.canAddressBeAdded(user)){
-            throw new InvalidInputException("You can add only 3 addresses to add new address delete existing address.");
-        }
+        addressService.canAddressBeAdded(user, addressDto);
         if(addressService.isSameAddressExist(addressDto,user)){
             throw new InvalidInputException("Address already exist");
         }
+
     }
 }

@@ -1,5 +1,6 @@
 package com.neonlab.common.services;
 import com.neonlab.common.annotations.Loggable;
+import com.neonlab.common.config.ConfigurationKeys;
 import com.neonlab.common.dto.AddressDto;
 import com.neonlab.common.entities.Address;
 import com.neonlab.common.entities.User;
@@ -16,8 +17,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+
+import static com.neonlab.common.config.ConfigurationKeys.POSITIVE_PINCODE_AVAILABLE;
+import static com.neonlab.common.config.ConfigurationKeys.POSITIVE_PINCODE_LIST;
 
 
 @Service
@@ -32,6 +40,8 @@ public class AddressService {
     private AddressRepository addressRepository;
 
     private final UserService userService;
+
+    private final SystemConfigService systemConfigService;
 
     public AddressDto addAddress(AddressDto addressDto) throws ServerException, InvalidInputException {
         Address address = new Address();
@@ -66,8 +76,23 @@ public class AddressService {
         return DELETE_MSG;
     }
 
-    public boolean canAddressBeAdded(User user) {
-        return user.getAddresses().size() < 3;
+    public void canAddressBeAdded(User user, AddressDto addressDto) throws InvalidInputException {
+        if (user.getAddresses().size() >= 3){
+            throw new InvalidInputException("You can add only 3 addresses to add new address delete existing address.");
+        }
+        var positivePincodeList = getPositivePincodeList();
+        if (!CollectionUtils.isEmpty(positivePincodeList) && !positivePincodeList.contains(addressDto.getPincode())){
+            throw new InvalidInputException("Sorry we are currently not available in the pincode "+ addressDto.getPincode());
+        }
+    }
+
+    private List<String> getPositivePincodeList() throws InvalidInputException {
+        var isPositivePincodeAvailable = Boolean.parseBoolean(systemConfigService.getSystemConfig(POSITIVE_PINCODE_AVAILABLE).getValue());
+        if (isPositivePincodeAvailable){
+            var pincodesString = systemConfigService.getSystemConfig(POSITIVE_PINCODE_LIST).getValue();
+            return new ArrayList<>(Arrays.stream(pincodesString.split(",")).map(p -> p.trim()).toList());
+        }
+        return new ArrayList<>();
     }
 
     public boolean isSameAddressExist(AddressDto addressDto, User user) {

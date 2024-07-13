@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "a1ebca28-8581-4711-b8d2-c20b3b36d221",
+		"_postman_id": "940d8216-81ff-4bd1-99f8-7842acf21df5",
 		"name": "Kasera General Store",
 		"description": "This has to the documentation of all the backend apis and respective contracts.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "31364017"
+		"_exporter_id": "10551797"
 	},
 	"item": [
 		{
@@ -3371,15 +3371,6 @@
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"paymentId\" : \"payment_id_457\",\r\n    \"boughtProductDetailsList\" : [\r\n        {\r\n            \"varietyId\" : \"d53b8f7b-39b6-4679-b2d1-b63429717db5\",\r\n            \"boughtQuantity\": 2\r\n        },\r\n        {\r\n            \"varietyId\" : \"80cde53a-d0f6-45f8-9988-aa9768f9efd9\",\r\n            \"boughtQuantity\": 1\r\n        }\r\n    ],\r\n    \"shippingInfo\" : {\r\n        \"id\" : \"27f86e22-5988-4ebd-9669-d260b2e3e089\"\r\n    },\r\n    \"paymentMode\":\"CASH_ON_DELIVERY\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
 								"url": {
 									"raw": "localhost:8802/v1/order/evaluate",
 									"host": [
@@ -3462,15 +3453,6 @@
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"boughtProductDetailsList\" : [\r\n        {\r\n            \"varietyId\" : \"d53b8f7b-39b6-4679-b2d1-b63429717db5\",\r\n            \"boughtQuantity\": 2\r\n        },\r\n        {\r\n            \"varietyId\" : \"80cde53a-d0f6-45f8-9988-aa9768f9efd9\",\r\n            \"boughtQuantity\": 1\r\n        }\r\n    ]\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
 								"url": {
 									"raw": "localhost:8802/v1/order/evaluate",
 									"host": [
@@ -4281,6 +4263,99 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"statusCode\": 200,\n    \"message\": \"Address added Successfully\",\n    \"responseBody\": {\n        \"landmark\": \"near pql complex\",\n        \"addressLine1\": \"plot no 12, xyz colony, abc road\",\n        \"city\": \"mumbai\",\n        \"state\": \"maharashtra\",\n        \"pincode\": \"345213\",\n        \"addressName\": \"house 1\",\n        \"primaryAddress\": true\n    }\n}"
+						},
+						{
+							"name": "negative pincode response",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"addressLine1\":\"plot no 12, xyz colony\", \r\n    \"addressLine2\":\"abc road\",\r\n    \"landmark\":\"near pql complex\",\r\n    \"city\":\"mumbai\",\r\n    \"state\":\"maharashtra\",\r\n    \"pincode\":\"766002\",\r\n    \"addressName\":\"house 2\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8801/v1/profile/address/add",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8801",
+									"path": [
+										"v1",
+										"profile",
+										"address",
+										"add"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 13 Jul 2024 11:26:51 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 400,\n    \"errorMessage\": \"Sorry we are currently not available in the pincode 766002\"\n}"
 						}
 					]
 				},
@@ -5943,6 +6018,117 @@
 								"v1",
 								"report",
 								"order"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{local-product-ms}}/v1/report/order",
+									"host": [
+										"{{local-product-ms}}"
+									],
+									"path": [
+										"v1",
+										"report",
+										"order"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 15 May 2024 08:09:05 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"responseBody\": {\n        \"totalOrders\": 2,\n        \"countPerStatus\": {\n            \"PACKAGING\": 1,\n            \"OUT_FOR_DELIVERY\": 0,\n            \"DELIVERED\": 0,\n            \"PROCESSING\": 0,\n            \"CANCELED\": 1\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "overview report",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local-product-ms}}/v1/report/overview",
+							"host": [
+								"{{local-product-ms}}"
+							],
+							"path": [
+								"v1",
+								"report",
+								"overview"
 							]
 						}
 					},

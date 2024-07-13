@@ -47,7 +47,7 @@ public class OtpService {
         try {
             communicationService.send(communicationRequest);
         } catch (Exception e) {
-            otpEntity.setStatus(SENT);
+            otpEntity.setStatus(FAILED);
             otpRepository.save(otpEntity);
             throw new ServerException("Error while sending sms : " + e.getMessage());
         }
