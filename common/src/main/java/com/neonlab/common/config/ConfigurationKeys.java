@@ -11,6 +11,8 @@ public class ConfigurationKeys {
     public static final String OTP_PROVIDER_CONFIG = "otp.provider.config";
     public static final String PAYMENT_SERVICE_PROVIDER_CONFIG = "payment-service.provider.config";
     public static final String PAYMENT_VALIDITY = "payment.expire.after.minutes";
+    public static final String POSITIVE_PINCODE_AVAILABLE = "positive.pincode.available";
+    public static final String POSITIVE_PINCODE_LIST = "positive.pincode.list";
 
 
 }
