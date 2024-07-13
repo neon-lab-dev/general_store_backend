@@ -10,6 +10,7 @@ import com.neonlab.common.enums.OrderStatus;
 import com.neonlab.common.expectations.InvalidInputException;
 import com.neonlab.common.expectations.ServerException;
 import com.neonlab.common.services.*;
+import com.neonlab.common.utilities.MathUtils;
 import com.neonlab.common.utilities.ObjectMapperUtils;
 import com.neonlab.common.utilities.PageableUtils;
 import com.neonlab.common.utilities.StringUtil;
@@ -26,6 +27,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -229,6 +232,30 @@ public class OrderService {
 
     public OrderReportModel getReport(){
         var totalOrders = orderRepository.count();
+        var countPerStatus = getOrderStatusLongHashMap();
+        var totalRevenue = getTotalRevenue();
+        return new OrderReportModel(totalOrders, countPerStatus, totalRevenue);
+    }
+
+    private BigDecimal getTotalRevenue(){
+        var retVal = BigDecimal.ZERO;
+        var deliveredOrders = orderRepository.findAll(
+                OrderSpecifications.buildSearchCriteria(
+                        OrderSearchCriteria.orderSearchCriteriaBuilder()
+                                .admin(true)
+                                .orderStatus(OrderStatus.DELIVERED)
+                                .build()
+                )
+        );
+        if (!CollectionUtils.isEmpty(deliveredOrders)){
+            for (var order : deliveredOrders){
+                retVal = retVal.add(order.getTotalItemCost());
+            }
+        }
+        return retVal;
+    }
+
+    private HashMap<OrderStatus, Long> getOrderStatusLongHashMap() {
         var countPerStatus = new HashMap<OrderStatus, Long>();
         for (var orderStatus : OrderStatus.values()){
             var value = orderRepository.count(
@@ -241,7 +268,7 @@ public class OrderService {
             );
             countPerStatus.put(orderStatus, value);
         }
-        return new OrderReportModel(totalOrders, countPerStatus);
+        return countPerStatus;
     }
 
     public OrderDto evaluate(OrderDto orderDto) throws InvalidInputException, JsonParseException, ServerException {
