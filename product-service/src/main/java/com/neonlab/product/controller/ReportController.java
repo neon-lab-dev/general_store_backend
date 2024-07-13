@@ -5,8 +5,10 @@ import com.neonlab.common.dto.ApiOutput;
 import com.neonlab.product.apis.OrderReportApi;
 import com.neonlab.product.apis.ProductReportApi;
 import com.neonlab.product.models.responses.OrderReportModel;
+import com.neonlab.product.models.responses.OverviewReportModel;
 import com.neonlab.product.models.responses.ProductReportModel;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +34,14 @@ public class ReportController {
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ApiOutput<OrderReportModel> getOrderReport(){
         return orderReportApi.process();
+    }
+
+    @GetMapping(value = "/overview")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ApiOutput<OverviewReportModel> getOverviewReport(){
+        var productReport = productReportApi.process().getResponseBody();
+        var orderReport = orderReportApi.process().getResponseBody();
+        return new ApiOutput<>(HttpStatus.OK.value(), null, new OverviewReportModel(productReport, orderReport));
     }
 
 }

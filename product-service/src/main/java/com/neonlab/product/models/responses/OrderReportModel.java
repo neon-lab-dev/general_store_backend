@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 @Data
@@ -14,5 +15,6 @@ public class OrderReportModel {
 
     private Long totalOrders;
     private Map<OrderStatus, Long> countPerStatus;
+    private BigDecimal totalRevenue;
 
 }
