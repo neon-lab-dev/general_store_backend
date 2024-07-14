@@ -30,13 +30,15 @@ public class WebSecurityConfiguration {
         return http.cors().and()
                 .csrf().disable()
                 .authorizeHttpRequests().requestMatchers(
-                        "/v1/send-otp",
-                        "/v1/verify-otp",
-                        "/v1/signup",
-                        "v1/login"
+                        "/login/v1/send-otp",
+                        "/login/v1/verify-otp",
+                        "/login/v1/signup",
+                        "/login/v1/login",
+                        "/login/",
+                        "/"
                 ).permitAll()
                 .and()
-                .authorizeHttpRequests().requestMatchers("/v1/**").authenticated()
+                .authorizeHttpRequests().requestMatchers("/login/v1/**").authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
