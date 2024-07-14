@@ -25,11 +25,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{aws-login}}/v1/send-otp",
+							"raw": "{{local-login-ms}}/login/v1/send-otp",
 							"host": [
-								"{{aws-login}}"
+								"{{local-login-ms}}"
 							],
 							"path": [
+								"login",
 								"v1",
 								"send-otp"
 							]
@@ -45,7 +46,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"phone\": \"9380969957\",\n    \"authCode\": \"0760\"\n}",
+							"raw": "{\n    \"phone\": \"9380969957\",\n    \"authCode\": \"5318\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -53,11 +54,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{local-login-ms}}/v1/verify-otp",
+							"raw": "{{local-login-ms}}/login/v1/verify-otp",
 							"host": [
 								"{{local-login-ms}}"
 							],
 							"path": [
+								"login",
 								"v1",
 								"verify-otp"
 							]
@@ -81,11 +83,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{aws-login}}/v1/signup",
+							"raw": "{{aws-login}}/login/v1/signup",
 							"host": [
 								"{{aws-login}}"
 							],
 							"path": [
+								"login",
 								"v1",
 								"signup"
 							]
@@ -176,13 +179,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8801/v1/logout",
+							"raw": "http://localhost:8801/login/v1/logout",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8801",
 							"path": [
+								"login",
 								"v1",
 								"logout"
 							],
@@ -312,12 +316,13 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8801/v1/login",
+							"raw": "localhost:8801/login/v1/login",
 							"host": [
 								"localhost"
 							],
 							"port": "8801",
 							"path": [
+								"login",
 								"v1",
 								"login"
 							]
@@ -4167,13 +4172,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8801/v1/profile/address/add",
+							"raw": "http://localhost:8801/login/v1/profile/address/add",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8801",
 							"path": [
+								"login",
 								"v1",
 								"profile",
 								"address",
@@ -4384,13 +4390,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8801/v1/profile/address/delete",
+							"raw": "http://localhost:8801/login/v1/profile/address/delete",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8801",
 							"path": [
+								"login",
 								"v1",
 								"profile",
 								"address",
@@ -4499,11 +4506,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{aws-login}}/v1/profile/address/fetch",
+							"raw": "{{local-login-ms}}/login/v1/profile/address/fetch",
 							"host": [
-								"{{aws-login}}"
+								"{{local-login-ms}}"
 							],
 							"path": [
+								"login",
 								"v1",
 								"profile",
 								"address",
@@ -5292,13 +5300,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8801/v1/profile/address/update",
+							"raw": "http://localhost:8801/login/v1/profile/address/update",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8801",
 							"path": [
+								"login",
 								"v1",
 								"profile",
 								"address",
@@ -9469,6 +9478,305 @@
 					]
 				}
 			]
+		},
+		{
+			"name": "Reach Out API",
+			"item": [
+				{
+					"name": "login slash reachout",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local-login-ms}}/",
+							"host": [
+								"{{local-login-ms}}"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "login slash reachout",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{local-login-ms}}/",
+									"host": [
+										"{{local-login-ms}}"
+									],
+									"path": [
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 14 Jul 2024 07:43:24 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"responseBody\": \"You have successfully reached login service.\"\n}"
+						}
+					]
+				},
+				{
+					"name": "login with slash reachout",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local-login-ms}}/login/",
+							"host": [
+								"{{local-login-ms}}"
+							],
+							"path": [
+								"login",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{local-login-ms}}/login/",
+									"host": [
+										"{{local-login-ms}}"
+									],
+									"path": [
+										"login",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 14 Jul 2024 07:44:21 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"responseBody\": \"You have successfully reached login service.\"\n}"
+						}
+					]
+				},
+				{
+					"name": "product reachout",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local-product-ms}}/",
+							"host": [
+								"{{local-product-ms}}"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{local-product-ms}}/",
+									"host": [
+										"{{local-product-ms}}"
+									],
+									"path": [
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 14 Jul 2024 07:46:48 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"responseBody\": \"You have reached product service now.\"\n}"
+						}
+					]
+				}
+			],
+			"description": "These are the APIs made to authorize the SSL setup"
 		}
 	]
 }

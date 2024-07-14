@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Loggable
-@RequestMapping(value = "/v1/report")
+@RequestMapping(value = "/login/v1/report")
 @RestController
 @RequiredArgsConstructor
 public class ReportController {

@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @Loggable
-@RequestMapping("/v1/profile")
+@RequestMapping("/login/v1/profile")
 public class ProfileController {
     @Autowired
     private AddAddressApi addAddressApi;
