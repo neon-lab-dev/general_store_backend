@@ -1,11 +1,14 @@
 package com.neonlab.product.repository.specifications;
 
 import com.neonlab.common.utilities.StringUtil;
+import com.neonlab.product.constants.EntityConstant;
 import com.neonlab.product.entities.Category;
 import com.neonlab.product.entities.Product;
 import com.neonlab.product.entities.Variety;
 import com.neonlab.product.models.searchCriteria.ProductSearchCriteria;
+import com.neonlab.product.models.searchCriteria.VarietySearchCriteria;
 import jakarta.persistence.criteria.Join;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -21,25 +24,10 @@ import static com.neonlab.product.constants.EntityConstant.Variety.*;
 
 public class VarietySpecifications {
 
-    public static Specification<Variety> buildSearchCriteria(final ProductSearchCriteria searchCriteria){
+    public static Specification<Variety> buildSearchCriteria(final VarietySearchCriteria searchCriteria){
         var retVal = Specification.<Variety>where(null);
-        if (!StringUtil.isNullOrEmpty(searchCriteria.getName())){
-            retVal = retVal.and(filterByNameLike(searchCriteria.getName()));
-        }
-        if (!StringUtil.isNullOrEmpty(searchCriteria.getCategory())){
-            retVal = retVal.and(filterByCategory(searchCriteria.getCategory()));
-        }
-        if (!StringUtil.isNullOrEmpty(searchCriteria.getSubCategory())){
-            retVal = retVal.and(filterBySubCategory(searchCriteria.getSubCategory()));
-        }
-        if (!StringUtil.isNullOrEmpty(searchCriteria.getSubCategory2())){
-            retVal = retVal.and(filterBySubCategory2(searchCriteria.getSubCategory2()));
-        }
-        if (!StringUtil.isNullOrEmpty(searchCriteria.getBrand())){
-            retVal = retVal.and(filterByBrand(searchCriteria.getBrand()));
-        }
-        if (!CollectionUtils.isEmpty(searchCriteria.getCodes())){
-            retVal = retVal.and(filterByCodeIn(searchCriteria.getCodes()));
+        if (!StringUtils.isEmpty(searchCriteria.getProductId())){
+            retVal = retVal.and(filterByProductId(searchCriteria.getProductId()));
         }
         if (Objects.nonNull(searchCriteria.getMinimumPrice())){
             retVal = retVal.and(filterByMinimumPrice(searchCriteria.getMinimumPrice()));
@@ -61,59 +49,15 @@ public class VarietySpecifications {
         return retVal;
     }
 
-    private static Specification<Variety> filterByNameLike(final String name){
+    private static Specification<Variety> filterByProductId(final String productId){
         return ((root, query, criteriaBuilder) ->
         {
             Join<Variety, Product> productVarietyJoin = root.join(PRODUCT);
-            return criteriaBuilder.like(productVarietyJoin.get(NAME), withLikePattern(name));
+            return criteriaBuilder.equal(productVarietyJoin.get(EntityConstant.ID), productId);
         }
         );
     }
 
-    private static Specification<Variety> filterByCategory(final String category){
-        return ((root, query, criteriaBuilder) ->
-        {
-            Join<Variety, Product> productVarietyJoin = root.join(PRODUCT);
-            return criteriaBuilder.like(productVarietyJoin.get(CATEGORY), withLikePattern(category));
-        }
-        );
-    }
-
-    private static Specification<Variety> filterBySubCategory(final String subCategory){
-        return ((root, query, criteriaBuilder) ->
-        {
-            Join<Variety, Product> productVarietyJoin = root.join(PRODUCT);
-            return criteriaBuilder.like(productVarietyJoin.get(SUB_CATEGORY), withLikePattern(subCategory));
-        }
-        );
-    }
-
-    private static Specification<Variety> filterBySubCategory2(final String subCategory2){
-        return ((root, query, criteriaBuilder) ->
-            {
-                Join<Variety, Product> productVarietyJoin = root.join(PRODUCT);
-                return criteriaBuilder.like(productVarietyJoin.get(SUB_CATEGORY2), withLikePattern(subCategory2));
-            }
-        );
-    }
-
-    private static Specification<Variety> filterByBrand(final String brand){
-        return ((root, query, criteriaBuilder) ->
-        {
-            Join<Variety, Product> productVarietyJoin = root.join(PRODUCT);
-            return criteriaBuilder.like(productVarietyJoin.get(BRAND), withLikePattern(brand));
-        }
-        );
-    }
-
-    private static Specification<Variety> filterByCodeIn(final List<String> codes){
-        return ((root, query, criteriaBuilder) ->
-        {
-            Join<Variety, Product> productVarietyJoin = root.join(PRODUCT);
-            return criteriaBuilder.in(productVarietyJoin.get(CODE)).value(codes);
-        }
-        );
-    }
 
     private static Specification<Variety> filterByMinimumPrice(final BigDecimal startingPrice){
         return ((root, query, criteriaBuilder) ->
@@ -143,8 +87,4 @@ public class VarietySpecifications {
         return PERCENTAGE + str + PERCENTAGE;
     }
 
-    @Repository
-    public static interface CategoryRepository  extends JpaRepository<Category,Integer> {
-
-    }
 }

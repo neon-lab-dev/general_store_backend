@@ -17,6 +17,9 @@ import java.util.List;
 public class ProductSearchCriteria extends PageableSearchCriteria {
 
     /**
+     * filter by product ID
+     */
+    private String id;/**
      * filter by product name
      */
     private String name;
@@ -57,7 +60,7 @@ public class ProductSearchCriteria extends PageableSearchCriteria {
     private String value;
 
     /**
-     * filter by varietyValue
+     * filter by variety Description
      */
     private String varietyDescription;
 
@@ -71,20 +74,13 @@ public class ProductSearchCriteria extends PageableSearchCriteria {
      */
     private BigDecimal maximumPrice;
     /**
-     * filter by product maximum price
+     * filter by quantity
      */
     private Integer quantity;
-    /**
-     * sort by product field
-     */
-    private String sortByProductField;
-    /**
-     * sort by variety field
-     */
-    private String sortByVarietyField;
 
     @Builder(builderMethodName = "productSearchCriteriaBuilder")
     public ProductSearchCriteria(
+            final String id,
             final String name,
             final String category,
             final String subCategory,
@@ -99,11 +95,10 @@ public class ProductSearchCriteria extends PageableSearchCriteria {
             final int pageNo,
             final String sortBy,
             final Direction sortDirection,
-            final Integer quantity,
-            final String sortByProductField,
-            final String sortByVarietyField
+            final Integer quantity
             ){
         super(perPage, pageNo, sortBy, sortDirection);
+        this.id = id;
         this.name = name;
         this.category = category;
         this.subCategory = subCategory;
@@ -115,8 +110,6 @@ public class ProductSearchCriteria extends PageableSearchCriteria {
         this.minimumPrice = minimumPrice;
         this.maximumPrice = maximumPrice;
         this.quantity = quantity;
-        this.sortByProductField = sortByProductField;
-        this.sortByVarietyField = sortByVarietyField;
     }
 
 

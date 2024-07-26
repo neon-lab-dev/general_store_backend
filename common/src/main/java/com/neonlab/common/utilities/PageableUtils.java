@@ -41,4 +41,16 @@ public class PageableUtils {
         );
     }
 
+    public static Pageable createPageable(
+            final PageableSearchCriteria searchCriteria,
+            final String sortBy
+            ){
+        return createPageable(
+                searchCriteria.getPerPage(),
+                searchCriteria.getPageNo(),
+                sortBy,
+                searchCriteria.getSortDirection()
+        );
+    }
+
 }

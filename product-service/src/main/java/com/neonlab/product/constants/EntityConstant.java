@@ -2,6 +2,8 @@ package com.neonlab.product.constants;
 
 public class EntityConstant {
 
+    public static final String ID = "id";
+
     public static class Product{
         public static final String NAME = "name";
         public static final String CATEGORY= "category";
