@@ -10,7 +10,6 @@ import com.neonlab.common.services.SystemConfigService;
 import com.neonlab.common.services.UserService;
 import com.neonlab.common.utilities.MathUtils;
 import com.neonlab.common.utilities.PageableUtils;
-import com.neonlab.common.utilities.StringUtil;
 import com.neonlab.product.constants.EntityConstant;
 import com.neonlab.product.dtos.ProductDto;
 import com.neonlab.product.dtos.VarietyDto;
@@ -19,6 +18,7 @@ import com.neonlab.product.entities.Variety;
 import com.neonlab.product.models.responses.ProductReportModel;
 import com.neonlab.product.models.responses.ProductVarietyResponse;
 import com.neonlab.product.models.searchCriteria.ProductSearchCriteria;
+import com.neonlab.product.models.searchCriteria.VarietySearchCriteria;
 import com.neonlab.product.repository.ProductRepository;
 import com.neonlab.common.utilities.ObjectMapperUtils;
 import com.neonlab.product.repository.VarietyRepository;
@@ -27,11 +27,14 @@ import com.neonlab.product.repository.specifications.VarietySpecifications;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import java.math.BigDecimal;
 import java.util.*;
+
+import static com.neonlab.common.constants.GlobalConstants.*;
 
 
 @Service
@@ -49,6 +52,11 @@ public class ProductService {
     public final static String DELETE_MESSAGE = "Product deleted successfully.";
 
     public final static String WHOLE_PRODUCT_DELETE_MESSAGE = "Product Deleted Successfully";
+
+    private static final List<String> SORTABLE_FIELDS = List.of(
+            "price",
+            "quantity"
+    );
 
 
     private final ProductRepository productRepository;
@@ -215,37 +223,55 @@ public class ProductService {
     }
 
     public PageableResponse<ProductDto> fetchProducts(final ProductSearchCriteria searchCriteria){
-        if (!StringUtil.isNullOrEmpty(searchCriteria.getSortByProductField())){
-            searchCriteria.setSortBy(searchCriteria.getSortByProductField());
-        }
-        var pageable = PageableUtils.createPageable(searchCriteria);
-        var productCodes = productRepository.findAll(
+        var pageable = createPageableForProductSearch(searchCriteria);
+        var products = productRepository.findAll(
                 ProductSpecifications.buildSearchCriteria(searchCriteria),
                 pageable
-        ).getContent().stream().map(Product::getCode).toList();
-        searchCriteria.setSortBy(GlobalConstants.CREATED_AT);
-        searchCriteria.setCodes(productCodes);
-        if (!StringUtil.isNullOrEmpty(searchCriteria.getSortByVarietyField())){
-            searchCriteria.setSortBy(searchCriteria.getSortByVarietyField());
-        }
-        var varieties = varietyRepository.findAll(
-                VarietySpecifications.buildSearchCriteria(searchCriteria),
-                Sort.by(searchCriteria.getSortDirection(), searchCriteria.getSortBy())
-        );
-        var resultList = fetchProductDto(varieties);
+        ).getContent();
+        var resultList = fetchProductDto(products, searchCriteria);
         return new PageableResponse<>(resultList, searchCriteria);
     }
 
-    private List<ProductDto> fetchProductDto(List<Variety> varieties){
-        var retVal = new ArrayList<ProductDto>();
-        if (!CollectionUtils.isEmpty(varieties)){
-            var productVarietyMap = new LinkedHashMap<String, List<VarietyDto>>();
-            varieties.forEach(variety -> constructProductIdToVarietyDtoListMap(productVarietyMap, variety));
-            for (var entry : productVarietyMap.entrySet()){
-                retVal.add(constructProductDto(entry.getKey(), entry.getValue()));
-            }
+    private Pageable createPageableForProductSearch(ProductSearchCriteria searchCriteria){
+        if (Objects.nonNull(searchCriteria.getSortBy()) &&
+                (SORTABLE_FIELDS.contains(searchCriteria.getSortBy()))
+        ){
+            var sortBy = EntityConstant.Product.VARIETIES.concat(".").concat(searchCriteria.getSortBy());
+            return PageableUtils.createPageable(searchCriteria, sortBy);
         }
+        return PageableUtils.createPageable(searchCriteria);
+    }
+
+    private List<ProductDto> fetchProductDto(List<Product> products, ProductSearchCriteria searchCriteria){
+        var retVal = new ArrayList<ProductDto>();
+        products.forEach(product -> constructProductDto(product, searchCriteria, retVal));
         return retVal;
+    }
+
+    private void constructProductDto(Product product, ProductSearchCriteria searchCriteria, List<ProductDto> productDtos){
+        try {
+            searchCriteria.setId(product.getId());
+            var varietySearchCriteria = new VarietySearchCriteria(searchCriteria);
+            var sort = Sort.by(
+                    searchCriteria.getSortDirection(),
+                    SORTABLE_FIELDS.contains(searchCriteria.getSortBy()) ?
+                            searchCriteria.getSortBy() : CREATED_AT
+                    );
+            var varieties = varietyRepository.findAll(
+                    VarietySpecifications.buildSearchCriteria(varietySearchCriteria), sort);
+            var retVal = ObjectMapperUtils.map(product, ProductDto.class);
+            retVal.setDocumentUrls(getDocumentUrls(product));
+            var varietyDtos = new ArrayList<VarietyDto>();
+            for (var variety : varieties){
+                var varietyDto = ObjectMapperUtils.map(variety, VarietyDto.class);
+                varietyDto.setDocumentUrls(getDocumentUrls(variety));
+                varietyDtos.add(varietyDto);
+            }
+            retVal.setVarietyList(varietyDtos);
+            productDtos.add(retVal);
+        } catch (ServerException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private ProductDto constructProductDto(String productId, List<VarietyDto> varietyDtos){
@@ -287,6 +313,13 @@ public class ProductService {
 
     private List<String> getDocumentUrls(Product product) {
         var productDoc = documentService.fetchByDocIdentifierAndEntityName(product.getId(), EntityConstant.Product.ENTITY_NAME);
+        return productDoc.stream()
+                .map(Document::getUrl)
+                .toList();
+    }
+
+    private List<String> getDocumentUrls(Variety variety) {
+        var productDoc = documentService.fetchByDocIdentifierAndEntityName(variety.getId(), EntityConstant.Variety.ENTITY_NAME);
         return productDoc.stream()
                 .map(Document::getUrl)
                 .toList();
