@@ -1,7 +1,6 @@
 package com.neonlab.product.service;
 import com.neonlab.common.annotations.Loggable;
 import com.neonlab.common.config.ConfigurationKeys;
-import com.neonlab.common.constants.GlobalConstants;
 import com.neonlab.common.entities.Document;
 import com.neonlab.common.expectations.*;
 import com.neonlab.common.models.PageableResponse;
@@ -264,7 +263,7 @@ public class ProductService {
             var varietyDtos = new ArrayList<VarietyDto>();
             for (var variety : varieties){
                 var varietyDto = ObjectMapperUtils.map(variety, VarietyDto.class);
-                varietyDto.setDocumentUrls(getDocumentUrls(variety));
+                varietyDto.setDocumentUrls(getDocumentUrls(variety,product));
                 varietyDtos.add(varietyDto);
             }
             retVal.setVarietyList(varietyDtos);
@@ -313,13 +312,6 @@ public class ProductService {
 
     private List<String> getDocumentUrls(Product product) {
         var productDoc = documentService.fetchByDocIdentifierAndEntityName(product.getId(), EntityConstant.Product.ENTITY_NAME);
-        return productDoc.stream()
-                .map(Document::getUrl)
-                .toList();
-    }
-
-    private List<String> getDocumentUrls(Variety variety) {
-        var productDoc = documentService.fetchByDocIdentifierAndEntityName(variety.getId(), EntityConstant.Variety.ENTITY_NAME);
         return productDoc.stream()
                 .map(Document::getUrl)
                 .toList();
