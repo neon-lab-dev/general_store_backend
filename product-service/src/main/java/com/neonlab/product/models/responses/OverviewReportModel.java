@@ -26,8 +26,9 @@ public class OverviewReportModel {
         this.totalRevenue = orderReportModel.getTotalRevenue();
         this.totalProducts = productReportModel.getTotalProducts();
         this.totalOrders = orderReportModel.getTotalOrders();
-        this.averageOrderCost = orderReportModel.getTotalOrders() != 0 ?
-                (orderReportModel.getTotalRevenue().divide(BigDecimal.valueOf(orderReportModel.getCountPerStatus().get(OrderStatus.DELIVERED)), MathUtils.DEFAULT_SCALE, RoundingMode.HALF_UP)):
+        var deliveredOrders = BigDecimal.valueOf(orderReportModel.getCountPerStatus().get(OrderStatus.DELIVERED));
+        this.averageOrderCost = !deliveredOrders.equals(BigDecimal.ZERO) ?
+                (orderReportModel.getTotalRevenue().divide(deliveredOrders,MathUtils.DEFAULT_SCALE, RoundingMode.HALF_UP)) :
                 BigDecimal.ZERO;
     }
 
