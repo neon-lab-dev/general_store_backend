@@ -23,6 +23,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 
 @Data
@@ -56,7 +57,6 @@ public class OrderDto {
                                 .setScale(MathUtils.DEFAULT_SCALE))
                 .toList();
         this.totalItemCost = MathUtils.getSum(allDiscountedPrice);
-        this.totalCost = this.totalItemCost.add(this.deliveryCharges);
         this.orderStatus = OrderStatus.PACKAGING;
         this.createdAt = new Date();
         this.paidDate = new Date();
@@ -78,6 +78,20 @@ public class OrderDto {
         }
         addressDto.setId(id);
         this.shippingInfo = addressDto;
+    }
+
+    public BigDecimal getDeliveryCharges(){
+        var retValMayBe = Optional.ofNullable(this.deliveryCharges);
+        return retValMayBe.orElse(BigDecimal.ZERO);
+    }
+
+    public void setTotalCost(){
+         this.totalCost = getTotalItemCost().add(getDeliveryCharges());
+    }
+
+    public BigDecimal getTotalItemCost(){
+        var retValMayBe = Optional.ofNullable(this.totalItemCost);
+        return retValMayBe.orElse(BigDecimal.ZERO);
     }
 
     public void setDriverId(String id){
