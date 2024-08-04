@@ -13,6 +13,7 @@ public class ConfigurationKeys {
     public static final String PAYMENT_VALIDITY = "payment.expire.after.minutes";
     public static final String POSITIVE_PINCODE_AVAILABLE = "positive.pincode.available";
     public static final String POSITIVE_PINCODE_LIST = "positive.pincode.list";
+    public static final String REACH_OUT_HTML_PATH = "reach.out.html.path";
 
 
 }
