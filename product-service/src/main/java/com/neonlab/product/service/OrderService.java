@@ -10,7 +10,6 @@ import com.neonlab.common.enums.OrderStatus;
 import com.neonlab.common.expectations.InvalidInputException;
 import com.neonlab.common.expectations.ServerException;
 import com.neonlab.common.services.*;
-import com.neonlab.common.utilities.MathUtils;
 import com.neonlab.common.utilities.ObjectMapperUtils;
 import com.neonlab.common.utilities.PageableUtils;
 import com.neonlab.common.utilities.StringUtil;
@@ -32,7 +31,7 @@ import org.springframework.util.CollectionUtils;
 import java.math.BigDecimal;
 import java.util.*;
 
-import static com.neonlab.common.config.ConfigurationKeys.CANCELABLE_PERIOD;
+import static com.neonlab.common.config.ConfigurationKeys.*;
 
 
 @Slf4j
@@ -49,7 +48,7 @@ public class OrderService {
     private final SystemConfigService systemConfigService;
     private final PaymentRecordService paymentRecordService;
 
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public OrderDto createOrder(OrderDto orderDto) throws InvalidInputException, ServerException, JsonParseException {
         var user = userService.getLoggedInUser();
         orderDto.setUserDetailsDto(new UserDto(user.getId()));
@@ -61,8 +60,10 @@ public class OrderService {
             variety.setQuantity(variety.getQuantity() - boughtProduct.getBoughtQuantity());
             productService.saveVariety(variety);
         }
-        setDeliveryCharge(orderDto);
         orderDto.setup();
+        validateMinOrderAmount(orderDto);
+        setDeliveryCharge(orderDto);
+        orderDto.setTotalCost();
         var order = orderDto.parseToEntity();
         order = orderRepository.save(order);
         orderDto = OrderDto.parse(order);
@@ -103,8 +104,14 @@ public class OrderService {
     }
 
     private void setDeliveryCharge(OrderDto orderDto) throws InvalidInputException {
-        var config = systemConfigService.getSystemConfig(ConfigurationKeys.DELIVERY_CHARGE);
-        orderDto.setDeliveryCharges(BigDecimal.valueOf(Integer.parseInt(config.getValue())));
+        var maxChargeableAmount = BigDecimal.valueOf(Integer.parseInt(
+                systemConfigService.getSystemConfig(MAX_DELIVERY_CHARGEABLE_ORDER_AMOUNT).getValue()
+            )
+        );
+        if (orderDto.getTotalItemCost().compareTo(maxChargeableAmount) < 0){
+            var config = systemConfigService.getSystemConfig(ConfigurationKeys.DELIVERY_CHARGE);
+            orderDto.setDeliveryCharges(BigDecimal.valueOf(Integer.parseInt(config.getValue())));
+        }
     }
 
     public OrderDto update(UpdateOrderRequest request) throws InvalidInputException, ServerException, JsonParseException {
@@ -141,6 +148,13 @@ public class OrderService {
     public void createOrderValidations(OrderDto orderDto) throws InvalidInputException {
         validateVarietyIds(orderDto);
         validateUserAndAddress(orderDto);
+    }
+
+    public void validateMinOrderAmount(OrderDto orderDto) throws InvalidInputException {
+        var minOrderAmount = BigDecimal.valueOf(Integer.parseInt(systemConfigService.getSystemConfig(MIN_ORDER_AMOUNT).getValue()));
+        if (orderDto.getTotalItemCost().compareTo(minOrderAmount) < 0){
+            throw new InvalidInputException("Order price cannot be less than "+minOrderAmount);
+        }
     }
 
     public void validateVarietyIds(OrderDto orderDto) throws InvalidInputException {
@@ -281,9 +295,11 @@ public class OrderService {
             boughtProduct.setup();
             variety.setQuantity(variety.getQuantity() - boughtProduct.getBoughtQuantity());
         }
-        setDeliveryCharge(orderDto);
         orderDto.setup();
         setUpDtos(orderDto);
+        validateMinOrderAmount(orderDto);
+        setDeliveryCharge(orderDto);
+        orderDto.setTotalCost();
         return orderDto;
     }
 

@@ -13,6 +13,8 @@ public class ConfigurationKeys {
     public static final String PAYMENT_VALIDITY = "payment.expire.after.minutes";
     public static final String POSITIVE_PINCODE_AVAILABLE = "positive.pincode.available";
     public static final String POSITIVE_PINCODE_LIST = "positive.pincode.list";
+    public static final String MIN_ORDER_AMOUNT = "min.order.amount";
+    public static final String MAX_DELIVERY_CHARGEABLE_ORDER_AMOUNT = "max.delivery.chargeable.order.amount";
 
 
 }

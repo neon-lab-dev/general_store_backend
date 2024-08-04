@@ -39,6 +39,9 @@ public class UpdateAddressApi {
         if(Strings.isEmpty(addressDto.getId())){
             throw new InvalidInputException(("You need to provide id to update the address."));
         }
+        if (Objects.nonNull(addressDto.getPincode())){
+            addressService.validatePincode(addressDto);
+        }
     }
 
 }

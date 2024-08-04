@@ -80,6 +80,10 @@ public class AddressService {
         if (user.getAddresses().size() >= 3){
             throw new InvalidInputException("You can add only 3 addresses to add new address delete existing address.");
         }
+        validatePincode(addressDto);
+    }
+
+    public void validatePincode(AddressDto addressDto) throws InvalidInputException {
         var positivePincodeList = getPositivePincodeList();
         if (!CollectionUtils.isEmpty(positivePincodeList) && !positivePincodeList.contains(addressDto.getPincode())){
             throw new InvalidInputException("Sorry we are currently not available in the pincode "+ addressDto.getPincode());
@@ -90,7 +94,7 @@ public class AddressService {
         var isPositivePincodeAvailable = Boolean.parseBoolean(systemConfigService.getSystemConfig(POSITIVE_PINCODE_AVAILABLE).getValue());
         if (isPositivePincodeAvailable){
             var pincodesString = systemConfigService.getSystemConfig(POSITIVE_PINCODE_LIST).getValue();
-            return new ArrayList<>(Arrays.stream(pincodesString.split(",")).map(p -> p.trim()).toList());
+            return new ArrayList<>(Arrays.stream(pincodesString.split(",")).map(String::trim).toList());
         }
         return new ArrayList<>();
     }
