@@ -23,3 +23,5 @@ databaseChangeLog:
       file: classpath:/db/changelog/changes/11_positive_pincode.sql
   - include:
       file: classpath:/db/changelog/changes/12_min_order_set_up.sql
+  - include:
+      file: classpath:/db/changelog/changes/13_setting_reach_out_path.sql

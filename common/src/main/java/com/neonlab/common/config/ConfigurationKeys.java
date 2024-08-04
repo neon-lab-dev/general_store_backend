@@ -15,6 +15,7 @@ public class ConfigurationKeys {
     public static final String POSITIVE_PINCODE_LIST = "positive.pincode.list";
     public static final String MIN_ORDER_AMOUNT = "min.order.amount";
     public static final String MAX_DELIVERY_CHARGEABLE_ORDER_AMOUNT = "max.delivery.chargeable.order.amount";
+    public static final String REACH_OUT_HTML_PATH = "reach.out.html.path";
 
 
 }
