@@ -18,7 +18,6 @@ public class ProductSpecifications {
 
     public static Specification<Product> buildSearchCriteria(final ProductSearchCriteria searchCriteria){
         var retVal = Specification.<Product>where(null);
-        retVal.and(distinctProducts());
         if (!StringUtil.isNullOrEmpty(searchCriteria.getName())){
             retVal = retVal.and(filterByNameLike(searchCriteria.getName()));
         }
@@ -55,13 +54,6 @@ public class ProductSpecifications {
             retVal = retVal.and(varietySpecification);
         }
         return retVal;
-    }
-
-    private static Specification<Product> distinctProducts(){
-        return ((root, query, criteriaBuilder) -> {
-            query.distinct(true);
-            return criteriaBuilder.conjunction();
-        });
     }
 
     private static Specification<Product> filterByNameLike(final String name){
@@ -102,6 +94,7 @@ public class ProductSpecifications {
     private static Specification<Product> filterByMinimumPrice(final BigDecimal startingPrice){
         return ((root, query, criteriaBuilder) ->
         {
+            query.distinct(true);
             var productVarietyJoin = root.join(VARIETIES);
             return criteriaBuilder.greaterThanOrEqualTo(productVarietyJoin.get(PRICE), startingPrice);
         }
@@ -111,6 +104,7 @@ public class ProductSpecifications {
     private static Specification<Product> filterByMaximumPrice(final BigDecimal endingPrice){
         return ((root, query, criteriaBuilder) ->
         {
+            query.distinct(true);
             var productVarietyJoin = root.join(VARIETIES);
             return criteriaBuilder.lessThanOrEqualTo(productVarietyJoin.get(PRICE), endingPrice);
         }
@@ -129,6 +123,7 @@ public class ProductSpecifications {
     private static Specification<Product> filterByVarietyQuantity(final Integer quantity){
         return ((root, query, criteriaBuilder) ->
         {
+            query.distinct(true);
             var productVarietyJoin = root.join(VARIETIES);
             return criteriaBuilder.equal(productVarietyJoin.get(QUANTITY), quantity);
         }
