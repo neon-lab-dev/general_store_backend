@@ -252,9 +252,9 @@ public class ProductService {
             searchCriteria.setId(product.getId());
             var varietySearchCriteria = new VarietySearchCriteria(searchCriteria);
             var sort = Sort.by(
-                    searchCriteria.getSortDirection(),
+                    Sort.Direction.ASC,
                     SORTABLE_FIELDS.contains(searchCriteria.getSortBy()) ?
-                            searchCriteria.getSortBy() : CREATED_AT
+                            searchCriteria.getSortBy() : "price"
                     );
             var varieties = varietyRepository.findAll(
                     VarietySpecifications.buildSearchCriteria(varietySearchCriteria), sort);

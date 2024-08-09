@@ -18,6 +18,7 @@ public class ProductSpecifications {
 
     public static Specification<Product> buildSearchCriteria(final ProductSearchCriteria searchCriteria){
         var retVal = Specification.<Product>where(null);
+        retVal.and(distinctProducts());
         if (!StringUtil.isNullOrEmpty(searchCriteria.getName())){
             retVal = retVal.and(filterByNameLike(searchCriteria.getName()));
         }
@@ -54,6 +55,13 @@ public class ProductSpecifications {
             retVal = retVal.and(varietySpecification);
         }
         return retVal;
+    }
+
+    private static Specification<Product> distinctProducts(){
+        return ((root, query, criteriaBuilder) -> {
+            query.distinct(true);
+            return criteriaBuilder.conjunction();
+        });
     }
 
     private static Specification<Product> filterByNameLike(final String name){
