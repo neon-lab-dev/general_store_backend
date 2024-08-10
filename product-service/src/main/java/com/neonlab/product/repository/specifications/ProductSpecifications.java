@@ -94,6 +94,7 @@ public class ProductSpecifications {
     private static Specification<Product> filterByMinimumPrice(final BigDecimal startingPrice){
         return ((root, query, criteriaBuilder) ->
         {
+            query.distinct(true);
             var productVarietyJoin = root.join(VARIETIES);
             return criteriaBuilder.greaterThanOrEqualTo(productVarietyJoin.get(PRICE), startingPrice);
         }
@@ -103,6 +104,7 @@ public class ProductSpecifications {
     private static Specification<Product> filterByMaximumPrice(final BigDecimal endingPrice){
         return ((root, query, criteriaBuilder) ->
         {
+            query.distinct(true);
             var productVarietyJoin = root.join(VARIETIES);
             return criteriaBuilder.lessThanOrEqualTo(productVarietyJoin.get(PRICE), endingPrice);
         }
@@ -121,6 +123,7 @@ public class ProductSpecifications {
     private static Specification<Product> filterByVarietyQuantity(final Integer quantity){
         return ((root, query, criteriaBuilder) ->
         {
+            query.distinct(true);
             var productVarietyJoin = root.join(VARIETIES);
             return criteriaBuilder.equal(productVarietyJoin.get(QUANTITY), quantity);
         }
