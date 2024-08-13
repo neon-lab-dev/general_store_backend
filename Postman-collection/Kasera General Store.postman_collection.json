@@ -1474,7 +1474,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "afc40a69-06bd-4bcc-bec6-34618efb38b6",
+									"value": "{{me}}",
 									"type": "string"
 								}
 							]
@@ -1482,9 +1482,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{local-product-ms}}/v1/product/list?quantity=0",
+							"raw": "{{prod-baseurl}}/v1/product/list?perPage=100&brand=dettol",
 							"host": [
-								"{{local-product-ms}}"
+								"{{prod-baseurl}}"
 							],
 							"path": [
 								"v1",
@@ -1529,12 +1529,11 @@
 								},
 								{
 									"key": "perPage",
-									"value": "100",
-									"disabled": true
+									"value": "100"
 								},
 								{
 									"key": "varietyDescription",
-									"value": "lag 10",
+									"value": "Icecream",
 									"disabled": true
 								},
 								{
@@ -1544,12 +1543,12 @@
 								},
 								{
 									"key": "brand",
-									"value": "your brand",
-									"disabled": true
+									"value": "dettol"
 								},
 								{
 									"key": "quantity",
-									"value": "0"
+									"value": "0",
+									"disabled": true
 								}
 							]
 						}
@@ -2408,7 +2407,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "02cce0b9-1541-4e22-b5c8-6ef422d8f622",
+									"value": "{{me}}",
 									"type": "string"
 								}
 							]
@@ -2417,7 +2416,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"paymentId\" : \"payment_id_456\",\r\n    \"boughtProductDetailsList\" : [\r\n        {\r\n            \"varietyId\" : \"0097f010-4b8e-4be5-adc7-31587d21a1ec\",\r\n            \"boughtQuantity\": 2\r\n        },\r\n        {\r\n            \"varietyId\" : \"0e9b5c28-ac97-4698-ba16-ce4407bbb35f\",\r\n            \"boughtQuantity\": 1\r\n        }\r\n    ],\r\n    \"shippingInfo\" : {\r\n        \"id\" : \"27f86e22-5988-4ebd-9669-d260b2e3e089\"\r\n    },\r\n    \"paymentMode\":\"CASH_ON_DELIVERY\"\r\n}",
+							"raw": "{\r\n    \"paymentId\" : \"PICKUP_AT_SHOP\",\r\n    \"boughtProductDetailsList\": [\r\n        {\r\n            \"varietyId\": \"05e6fcee-281a-48e4-b106-d8041b318ec1\",\r\n            \"boughtQuantity\": 3\r\n        }\r\n    ],\r\n    \"shippingInfo\" : {\r\n        \"id\" : \"db4951c4-2d2e-4546-9726-4aaea7df2abe\"\r\n    },\r\n    \"paymentMode\":\"PICKUP_AT_SHOP\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2425,11 +2424,10 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8802/v1/order/create",
+							"raw": "{{local-product-ms}}/v1/order/create",
 							"host": [
-								"localhost"
+								"{{local-product-ms}}"
 							],
-							"port": "8802",
 							"path": [
 								"v1",
 								"order",
@@ -3105,7 +3103,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "02cce0b9-1541-4e22-b5c8-6ef422d8f622",
+									"value": "{{me}}",
 									"type": "string"
 								}
 							]
@@ -3113,11 +3111,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8802/v1/order/list",
+							"raw": "{{prod-baseurl}}/v1/order/list",
 							"host": [
-								"localhost"
+								"{{prod-baseurl}}"
 							],
-							"port": "8802",
 							"path": [
 								"v1",
 								"order",
@@ -3331,25 +3328,22 @@
 				},
 				{
 					"name": "evaluate Order",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "02cce0b9-1541-4e22-b5c8-6ef422d8f622",
+									"value": "{{me}}",
 									"type": "string"
 								}
 							]
 						},
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"boughtProductDetailsList\" : [\r\n        {\r\n            \"varietyId\" : \"d53b8f7b-39b6-4679-b2d1-b63429717db5\",\r\n            \"boughtQuantity\": 2\r\n        },\r\n        {\r\n            \"varietyId\" : \"80cde53a-d0f6-45f8-9988-aa9768f9efd9\",\r\n            \"boughtQuantity\": 1\r\n        }\r\n    ]\r\n}",
+							"raw": "{\r\n    \"boughtProductDetailsList\": [\r\n        {\r\n            \"varietyId\": \"1b334f1d-2d82-49d6-b871-79ff494ca7a1\",\r\n            \"boughtQuantity\": 3\r\n        }\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3357,11 +3351,10 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8802/v1/order/evaluate",
+							"raw": "{{local-product-ms}}/v1/order/evaluate",
 							"host": [
-								"localhost"
+								"{{local-product-ms}}"
 							],
-							"port": "8802",
 							"path": [
 								"v1",
 								"order",
@@ -4498,7 +4491,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{token}}",
+									"value": "{{me}}",
 									"type": "string"
 								}
 							]
@@ -4506,9 +4499,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{local-login-ms}}/login/v1/profile/address/fetch",
+							"raw": "{{prod-baseurl}}/login/v1/profile/address/fetch",
 							"host": [
-								"{{local-login-ms}}"
+								"{{prod-baseurl}}"
 							],
 							"path": [
 								"login",
@@ -5746,7 +5739,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "\r\n[ \"e1384d70-bec4-4083-8e24-ccd02b59d08a\",\"126b7c66-9966-47d6-8db9-69b3c9b97506\"]",
+							"raw": "\r\n[ \"229bebf3-7d69-4711-87d7-1e8785544550\"]",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -5754,12 +5747,10 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8802/v1/driver/delete",
-							"protocol": "http",
+							"raw": "{{prod-baseurl}}/v1/driver/delete",
 							"host": [
-								"localhost"
+								"{{prod-baseurl}}"
 							],
-							"port": "8802",
 							"path": [
 								"v1",
 								"driver",
@@ -5786,12 +5777,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8802/v1/driver/list",
-							"protocol": "http",
+							"raw": "{{prod-baseurl}}/v1/driver/list",
 							"host": [
-								"localhost"
+								"{{prod-baseurl}}"
 							],
-							"port": "8802",
 							"path": [
 								"v1",
 								"driver",
@@ -6239,7 +6228,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{token}}",
+									"value": "{{me}}",
 									"type": "string"
 								}
 							]
@@ -6247,11 +6236,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{aws-login}}/v1/profile/user/fetch",
+							"raw": "{{prod-baseurl}}/login/v1/profile/user/fetch",
 							"host": [
-								"{{aws-login}}"
+								"{{prod-baseurl}}"
 							],
 							"path": [
+								"login",
 								"v1",
 								"profile",
 								"user",
@@ -6460,10 +6450,30 @@
 				{
 					"name": "fetchByAdmin",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": ""
+							"raw": "{{prod-baseurl}}/login/v1/profile/admin/fetch",
+							"host": [
+								"{{prod-baseurl}}"
+							],
+							"path": [
+								"login",
+								"v1",
+								"profile",
+								"admin",
+								"fetch"
+							]
 						},
 						"description": "### Fetch Admin Profile\n\nThis endpoint retrieves the all user profile by admin.\n\n#### Request\n\n- Method: GET\n    \n- URL: `localhost:8801/v1/profile/admin/fetch`\n    \n\n#### Response\n\nThe response is in JSON format and follows the schema below:\n\n``` json\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"statusCode\": {\n      \"type\": \"number\"\n    },\n    \"responseBody\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"perPage\": {\n          \"type\": \"number\"\n        },\n        \"pageNo\": {\n          \"type\": \"number\"\n        },\n        \"sortBy\": {\n          \"type\": \"string\"\n        },\n        \"sortDirection\": {\n          \"type\": \"string\"\n        },\n        \"content\": {\n          \"type\": \"array\",\n          \"items\": {\n            \"type\": \"object\",\n            \"properties\": {\n              \"id\": {\n                \"type\": \"string\"\n              },\n              \"name\": {\n                \"type\": \"string\"\n              },\n              \"email\": {\n                \"type\": \"string\"\n              },\n              \"primaryPhoneNo\": {\n                \"type\": \"string\"\n              },\n              \"secondaryPhoneNo\": {\n                \"type\": \"string\"\n              }\n            }\n          }\n        },\n        \"count\": {\n          \"type\": \"number\"\n        }\n      }\n    }\n  }\n}\n\n ```"
 					},
@@ -8769,7 +8779,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "d6da1e38-9dcb-4ad9-bc88-045efc50878b",
+									"value": "{{me}}",
 									"type": "string"
 								}
 							]
@@ -8777,9 +8787,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{local-product-ms}}/v1/payment/get/payment-link?amount=1000&description=Rathaloo 1",
+							"raw": "{{prod-baseurl}}/v1/payment/get/payment-link?amount=175&description=Dettol Rk",
 							"host": [
-								"{{local-product-ms}}"
+								"{{prod-baseurl}}"
 							],
 							"path": [
 								"v1",
@@ -8790,7 +8800,7 @@
 							"query": [
 								{
 									"key": "amount",
-									"value": "1000"
+									"value": "175"
 								},
 								{
 									"key": "upiLink",
@@ -8799,7 +8809,7 @@
 								},
 								{
 									"key": "description",
-									"value": "Rathaloo 1"
+									"value": "Dettol Rk"
 								}
 							]
 						}
@@ -9260,7 +9270,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "cff13512-c006-4874-879f-f7ed6b1fa71d",
+									"value": "{{me}}",
 									"type": "string"
 								}
 							]
@@ -9268,9 +9278,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{local-product-ms}}/v1/payment/status?paymentId=dba85707-4abe-456d-8077-033383c454a1",
+							"raw": "{{prod-baseurl}}/v1/payment/status?paymentId=a1610359-081f-4849-9d64-a629dcba0216",
 							"host": [
-								"{{local-product-ms}}"
+								"{{prod-baseurl}}"
 							],
 							"path": [
 								"v1",
@@ -9280,7 +9290,7 @@
 							"query": [
 								{
 									"key": "paymentId",
-									"value": "dba85707-4abe-456d-8077-033383c454a1"
+									"value": "a1610359-081f-4849-9d64-a629dcba0216"
 								},
 								{
 									"key": "external",
@@ -9488,9 +9498,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{local-login-ms}}/",
+							"raw": "{{prod-login}}/",
 							"host": [
-								"{{local-login-ms}}"
+								"{{prod-login}}"
 							],
 							"path": [
 								""
@@ -9585,9 +9595,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{local-login-ms}}/login/",
+							"raw": "{{aws-login}}/login/",
 							"host": [
-								"{{local-login-ms}}"
+								"{{aws-login}}"
 							],
 							"path": [
 								"login",
@@ -9684,10 +9694,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{local-product-ms}}/",
+							"raw": "http://35.154.133.112:8802/",
+							"protocol": "http",
 							"host": [
-								"{{local-product-ms}}"
+								"35",
+								"154",
+								"133",
+								"112"
 							],
+							"port": "8802",
 							"path": [
 								""
 							]
@@ -9777,6 +9792,253 @@
 				}
 			],
 			"description": "These are the APIs made to authorize the SSL setup"
+		},
+		{
+			"name": "CartAPIs",
+			"item": [
+				{
+					"name": "Create or update cart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{me}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"boughtProductDetailsList\": [\n        {\n            \"varietyId\": \"1b334f1d-2d82-49d6-b871-79ff494ca7a1\",\n            \"boughtQuantity\": 3\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local-product-ms}}/v1/cart/create-or-update",
+							"host": [
+								"{{local-product-ms}}"
+							],
+							"path": [
+								"v1",
+								"cart",
+								"create-or-update"
+							]
+						},
+						"description": "This api is used to created or update the cart items of the logged in customer.\nIn case of update, the given details override existing details."
+					},
+					"response": [
+						{
+							"name": "success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"boughtProductDetailsList\" : [\n        {\n            \"varietyId\" : \"1b334f1d-2d82-49d6-b871-79ff494ca7a1\",\n            \"boughtQuantity\": 2\n        },\n        {\n            \"varietyId\" : \"f01c6a8e-492a-4bd8-b1d7-bd3fe65c7427\",\n            \"boughtQuantity\": 1\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{local-product-ms}}/v1/cart/create-or-update",
+									"host": [
+										"{{local-product-ms}}"
+									],
+									"path": [
+										"v1",
+										"cart",
+										"create-or-update"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 10 Aug 2024 11:13:45 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"responseBody\": {\n        \"id\": \"d6a14b03-ab73-45c0-b0ab-7103745cae29\",\n        \"boughtProductDetailsList\": [\n            {\n                \"varietyId\": \"1b334f1d-2d82-49d6-b871-79ff494ca7a1\",\n                \"name\": \"Bisleri Pakaged Drinking Water(500ml)\",\n                \"price\": 50,\n                \"discountPercent\": 0,\n                \"discountedPrice\": 50,\n                \"boughtQuantity\": 2,\n                \"value\": \"5\",\n                \"unit\": \"PCS\",\n                \"boughtPrice\": 100,\n                \"savings\": 0,\n                \"documents\": [\n                    \"https://ik.imagekit.io/lxnsj17b0/kasera-Store/brand-bisleri-01_fU1jxVbb2i.webp\"\n                ]\n            },\n            {\n                \"varietyId\": \"f01c6a8e-492a-4bd8-b1d7-bd3fe65c7427\",\n                \"name\": \"Dettol skin care soap\",\n                \"price\": 171,\n                \"discountPercent\": 4,\n                \"discountedPrice\": 165,\n                \"boughtQuantity\": 1,\n                \"value\": \"100\",\n                \"unit\": \"GRAM\",\n                \"boughtPrice\": 165,\n                \"savings\": 6,\n                \"documents\": [\n                    \"https://ik.imagekit.io/lxnsj17b0/kasera-Store/download_D3eF14crR.jpg\"\n                ]\n            }\n        ],\n        \"userDetailsDto\": {\n            \"id\": \"cbef6e6f-5e9b-4b6b-b640-4b0defe0b7f0\",\n            \"name\": \"Ritik Agrawal\",\n            \"email\": \"ritikagrawal1697@gmail.com\",\n            \"primaryPhoneNo\": \"9380969936\",\n            \"secondaryPhoneNo\": null\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "fetch cart",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{me}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local-product-ms}}/v1/cart/list",
+							"host": [
+								"{{local-product-ms}}"
+							],
+							"path": [
+								"v1",
+								"cart",
+								"list"
+							]
+						},
+						"description": "This API is used to get the logged in users cart details."
+					},
+					"response": [
+						{
+							"name": "success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{local-product-ms}}/v1/cart/list",
+									"host": [
+										"{{local-product-ms}}"
+									],
+									"path": [
+										"v1",
+										"cart",
+										"list"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Method"
+								},
+								{
+									"key": "Vary",
+									"value": "Access-Control-Request-Headers"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, no-store, max-age=0, must-revalidate"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "Expires",
+									"value": "0"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "DENY"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 10 Aug 2024 12:16:35 GMT"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=60"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 200,\n    \"responseBody\": {\n        \"id\": \"01da5f95-2dff-4abc-85e5-d72022158f57\",\n        \"boughtProductDetailsList\": [\n            {\n                \"varietyId\": \"1b334f1d-2d82-49d6-b871-79ff494ca7a1\",\n                \"name\": \"Bisleri Pakaged Drinking Water(500ml)\",\n                \"price\": 50,\n                \"discountPercent\": 0,\n                \"discountedPrice\": 50,\n                \"boughtQuantity\": 3,\n                \"value\": \"5\",\n                \"unit\": \"PCS\",\n                \"boughtPrice\": 150,\n                \"savings\": 0,\n                \"documents\": [\n                    \"https://ik.imagekit.io/lxnsj17b0/kasera-Store/brand-bisleri-01_fU1jxVbb2i.webp\"\n                ]\n            }\n        ],\n        \"userDetailsDto\": {\n            \"id\": \"cbef6e6f-5e9b-4b6b-b640-4b0defe0b7f0\",\n            \"name\": \"Ritik Agrawal\",\n            \"email\": \"ritikagrawal1697@gmail.com\",\n            \"primaryPhoneNo\": \"9380969936\",\n            \"secondaryPhoneNo\": null\n        }\n    }\n}"
+						}
+					]
+				}
+			]
 		}
 	]
 }

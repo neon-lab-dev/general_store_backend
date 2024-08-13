@@ -47,6 +47,7 @@ public class OrderService {
     private final AddressService addressService;
     private final SystemConfigService systemConfigService;
     private final PaymentRecordService paymentRecordService;
+    private final CartService cartService;
 
     @Transactional(rollbackOn = Exception.class)
     public OrderDto createOrder(OrderDto orderDto) throws InvalidInputException, ServerException, JsonParseException {
@@ -68,6 +69,7 @@ public class OrderService {
         order = orderRepository.save(order);
         orderDto = OrderDto.parse(order);
         setUpDtos(orderDto);
+        cartService.delete();
         return orderDto;
     }
 
@@ -159,6 +161,18 @@ public class OrderService {
 
     public void validateVarietyIds(OrderDto orderDto) throws InvalidInputException {
         for (var boughtProduct : orderDto.getBoughtProductDetailsList()){
+            var variety = productService.fetchVarietyById(boughtProduct.getVarietyId());
+            if (boughtProduct.getBoughtQuantity() > variety.getQuantity()){
+                throw new InvalidInputException(
+                        String.format("Bought quantity cannot be more than Product available stock." +
+                                " Bought quantity is %d and available stock is %d",
+                                boughtProduct.getBoughtQuantity(), variety.getQuantity()));
+            }
+        }
+    }
+
+    public void validateVarietyIds(List<BoughtProductDetailsDto> boughtProductDetailsDtoList) throws InvalidInputException {
+        for (var boughtProduct : boughtProductDetailsDtoList){
             var variety = productService.fetchVarietyById(boughtProduct.getVarietyId());
             if (boughtProduct.getBoughtQuantity() > variety.getQuantity()){
                 throw new InvalidInputException(
@@ -293,7 +307,6 @@ public class OrderService {
             var productVarietyResponse = productService.fetchProductVarietyResponse(variety);
             ObjectMapperUtils.map(productVarietyResponse, boughtProduct);
             boughtProduct.setup();
-            variety.setQuantity(variety.getQuantity() - boughtProduct.getBoughtQuantity());
         }
         orderDto.setup();
         setUpDtos(orderDto);
