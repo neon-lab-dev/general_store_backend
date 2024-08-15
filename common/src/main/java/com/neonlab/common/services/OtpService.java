@@ -3,7 +3,6 @@ package com.neonlab.common.services;
 import com.neonlab.common.config.ConfigurationKeys;
 import com.neonlab.common.dto.*;
 import com.neonlab.common.enums.AuthStatus;
-import com.neonlab.common.enums.CommunicationMode;
 import com.neonlab.common.expectations.InvalidInputException;
 import com.neonlab.common.expectations.ServerException;
 import com.neonlab.common.models.CommunicationRequest;
@@ -11,9 +10,7 @@ import com.neonlab.common.models.LoginResponse;
 import com.neonlab.common.models.OtpSendResponse;
 import com.neonlab.common.utilities.DateUtils;
 import com.neonlab.common.entities.Otp;
-import com.neonlab.common.entities.SystemConfig;
 import com.neonlab.common.repositories.otpRepository;
-import com.neonlab.common.repositories.SystemConfigRepository;
 import com.neonlab.common.utilities.OtpUtil;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +29,7 @@ import static com.neonlab.common.enums.AuthStatus.EXPIRED;
 @NoArgsConstructor
 public class OtpService {
 
-    @Autowired private SystemConfigRepository systemConfigRepository;
+    @Autowired private SystemConfigService systemConfigService;
     @Autowired private otpRepository otpRepository;
     @Autowired private UserService userService;
     @Autowired private SmsCommunicationService communicationService;
@@ -41,7 +38,7 @@ public class OtpService {
 
     private static final String OTP_SENT = "OTP send successfully to %s";
 
-    public OtpSendResponse send(AuthenticationRequest request) throws ServerException {
+    public OtpSendResponse send(AuthenticationRequest request) throws ServerException, InvalidInputException {
         Otp otpEntity = getOtpEntity(request);
         var communicationRequest = new CommunicationRequest(otpEntity);
         try {
@@ -56,22 +53,30 @@ public class OtpService {
         return new OtpSendResponse(String.format(OTP_SENT, request.getPhone()), SENT);
     }
 
-    private Otp getOtpEntity(AuthenticationRequest request){
+    private Otp getOtpEntity(AuthenticationRequest request) throws InvalidInputException {
         var retVal = new Otp(request.getPhone(), request.getPhone());
         retVal.setCommunicatedTo(request.getPhone());
-        retVal.setOtp(OtpUtil.generateOtp(4));
-        String expiryMinutes = getSystemConfig(ConfigurationKeys.OTP_EXPIRY_SMS).getValue();
+        retVal.setOtp(getOtp());
+        String expiryMinutes = systemConfigService.getSystemConfig(ConfigurationKeys.OTP_EXPIRY_SMS).getValue();
         retVal.setExpiryTime(DateUtils.getDateAfterNMinutes(Integer.parseInt(expiryMinutes)));
         return retVal;
     }
 
-    // to move in commons after moving entity & repo
-    private SystemConfig getSystemConfig(String smsKey) {
-        SystemConfig systemConfig = systemConfigRepository.findByKey(smsKey);
-        if (Objects.isNull(systemConfig)) {
-            throw new IllegalArgumentException("No Config defined in system config for key " + smsKey);
+    private String getOtp() throws InvalidInputException {
+        var staticOtpEnabled = isStaticOtpEnabled();
+        if (staticOtpEnabled){
+            return systemConfigService.getSystemConfig(ConfigurationKeys.STATIC_OTP).getValue();
         }
-        return systemConfig;
+        return OtpUtil.generateOtp(4);
+    }
+
+    private boolean isStaticOtpEnabled(){
+        try{
+            return Boolean.parseBoolean(systemConfigService.getSystemConfig(ConfigurationKeys.STATIC_OTP_ENABLED).getValue());
+        } catch (InvalidInputException e) {
+            log.error(e.getMessage());
+            return false;
+        }
     }
 
 
