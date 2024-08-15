@@ -25,3 +25,5 @@ databaseChangeLog:
       file: classpath:/db/changelog/changes/12_min_order_set_up.sql
   - include:
       file: classpath:/db/changelog/changes/13_setting_reach_out_path.sql
+  - include:
+      file: classpath:/db/changelog/changes/14_configuring_static_otp.sql
