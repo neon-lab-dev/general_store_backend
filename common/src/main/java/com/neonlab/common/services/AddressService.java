@@ -1,6 +1,5 @@
 package com.neonlab.common.services;
 import com.neonlab.common.annotations.Loggable;
-import com.neonlab.common.config.ConfigurationKeys;
 import com.neonlab.common.dto.AddressDto;
 import com.neonlab.common.entities.Address;
 import com.neonlab.common.entities.User;
@@ -61,11 +60,11 @@ public class AddressService {
         return ObjectMapperUtils.map(address, AddressDto.class);
     }
 
-    public String delete(List<String> ids) throws ServerException {
+    public String delete(List<String> ids, Boolean force) throws ServerException {
         for(String id: ids){
             var addressMaybe = addressRepository.findById(id);
             if (addressMaybe.isPresent()){
-                if(addressMaybe.get().isPrimaryAddress()){
+                if(addressMaybe.get().isPrimaryAddress() && !force){
                     throw new ServerException("Before deleting primary address make another address as primary address.");
                 }
                 addressRepository.delete(addressMaybe.get());
@@ -74,6 +73,13 @@ public class AddressService {
             }
         }
         return DELETE_MSG;
+    }
+
+    public void deleteAll() throws InvalidInputException, ServerException {
+        var searchCriteria = new AddressSearchCriteria();
+        var addresses = fetch(searchCriteria);
+        var addressList = addresses.getContent().stream().map(AddressDto::getId).toList();
+        delete(addressList, true);
     }
 
     public void canAddressBeAdded(User user, AddressDto addressDto) throws InvalidInputException {

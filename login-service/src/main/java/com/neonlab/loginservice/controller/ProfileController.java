@@ -5,6 +5,7 @@ import com.neonlab.common.dto.AddressDto;
 import com.neonlab.common.dto.ApiOutput;
 import com.neonlab.common.dto.UserDto;
 import com.neonlab.common.expectations.InvalidInputException;
+import com.neonlab.common.expectations.ServerException;
 import com.neonlab.common.searchcriteria.AddressSearchCriteria;
 import com.neonlab.common.searchcriteria.UserSearchCriteria;
 import com.neonlab.common.services.UserService;
@@ -41,6 +42,9 @@ public class ProfileController {
 
     @Autowired
     private FetchUsersByAdminApi fetchUsersByAdminApi;
+
+    @Autowired
+    private DeleteUserApi deleteUserApi;
 
     @PostMapping("/address/add")
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
@@ -83,6 +87,11 @@ public class ProfileController {
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ApiOutput<?> update(@RequestBody UserDto userDto){
         return updateUserApi.update(userDto);
+    }
+
+    @DeleteMapping("/user/delete")
+    public ApiOutput<?> delete() throws InvalidInputException, ServerException {
+        return deleteUserApi.delete();
     }
 
     @GetMapping("/admin/fetch")

@@ -39,6 +39,11 @@ public class AuthUserService implements UserDetailsService {
         return retVal;
     }
 
+    public void delete(String userId) throws InvalidInputException {
+        var authUser = fetchLatestByUserId(userId);
+        authUserRepository.delete(authUser);
+    }
+
     public AuthUser fetchById(String id) throws InvalidInputException {
         return authUserRepository.findById(id).orElseThrow(() ->
                 new InvalidInputException(String.format("AuthUser not found with id %s.",id)));

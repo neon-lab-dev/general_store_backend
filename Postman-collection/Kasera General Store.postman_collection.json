@@ -46,7 +46,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"phone\": \"9380969957\",\n    \"authCode\": \"5318\"\n}",
+							"raw": "{\n    \"phone\": \"8210464851\",\n    \"authCode\": \"9999\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -54,9 +54,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{local-login-ms}}/login/v1/verify-otp",
+							"raw": "{{prod-baseurl}}/login/v1/verify-otp",
 							"host": [
-								"{{local-login-ms}}"
+								"{{prod-baseurl}}"
 							],
 							"path": [
 								"login",
@@ -3351,9 +3351,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{local-product-ms}}/v1/order/evaluate",
+							"raw": "{{prod-baseurl}}/v1/order/evaluate",
 							"host": [
-								"{{local-product-ms}}"
+								"{{prod-baseurl}}"
 							],
 							"path": [
 								"v1",
@@ -6728,6 +6728,37 @@
 							"body": "{\n    \"statusCode\": 200,\n    \"responseBody\": {\n        \"perPage\": 10,\n        \"pageNo\": 1,\n        \"sortBy\": \"createdAt\",\n        \"sortDirection\": \"DESC\",\n        \"content\": [\n            {\n                \"id\": \"962c45f4-42bb-4b9b-bd8d-cc123ba71f14\",\n                \"name\": \"Saurav kr\",\n                \"email\": \"sauravkr@gmail.com\",\n                \"primaryPhoneNo\": \"9380969431\",\n                \"secondaryPhoneNo\": null\n            }\n        ],\n        \"count\": 1\n    }\n}"
 						}
 					]
+				},
+				{
+					"name": "delete user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "415c1896-f3da-4bdd-b4c8-a0e1d6968b49",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{local-login-ms}}/login/v1/profile/user/delete",
+							"host": [
+								"{{local-login-ms}}"
+							],
+							"path": [
+								"login",
+								"v1",
+								"profile",
+								"user",
+								"delete"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"description": "Get and update user APIs"
@@ -9813,7 +9844,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"boughtProductDetailsList\": [\n        {\n            \"varietyId\": \"1b334f1d-2d82-49d6-b871-79ff494ca7a1\",\n            \"boughtQuantity\": 3\n        }\n    ]\n}",
+							"raw": "{\n    \"boughtProductDetailsList\": [\n        {\n            \"varietyId\": \"2e0fd630-435e-4637-9755-2d03a9f3206c\",\n            \"boughtQuantity\": 5\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -9821,9 +9852,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{local-product-ms}}/v1/cart/create-or-update",
+							"raw": "{{prod-baseurl}}/v1/cart/create-or-update",
 							"host": [
-								"{{local-product-ms}}"
+								"{{prod-baseurl}}"
 							],
 							"path": [
 								"v1",
@@ -9942,9 +9973,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{local-product-ms}}/v1/cart/list",
+							"raw": "{{prod-baseurl}}/v1/cart/list",
 							"host": [
-								"{{local-product-ms}}"
+								"{{prod-baseurl}}"
 							],
 							"path": [
 								"v1",
