@@ -21,7 +21,7 @@ public class DeleteAddressApi {
     public ApiOutput<?> delete(List<String> ids){
         try{
             validate(ids);
-            String msg = addressService.delete(ids);
+            String msg = addressService.delete(ids, false);
             return new ApiOutput<>(HttpStatus.OK.value(), msg,null);
 
         } catch (Exception e) {

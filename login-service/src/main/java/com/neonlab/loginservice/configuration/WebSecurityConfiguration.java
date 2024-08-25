@@ -35,6 +35,7 @@ public class WebSecurityConfiguration {
                         "/login/v1/signup",
                         "/login/v1/login",
                         "/login/",
+                        "/login/v1/profile/user/delete",
                         "/"
                 ).permitAll()
                 .and()

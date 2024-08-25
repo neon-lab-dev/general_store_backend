@@ -34,7 +34,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final AuthUserService authUserService;
 
-    public User createUser(SignUpRequest request) throws ServerException {
+    public User createUser(SignUpRequest request) {
         var retVal = new User(request.getPrimaryPhoneNo(), request.getPrimaryPhoneNo());
         retVal.setName(request.getName());
         retVal.setEmail(request.getEmail());
@@ -63,6 +63,12 @@ public class UserService {
         ObjectMapperUtils.map(userDto,user);
         user = userRepository.save(user);
         return ObjectMapperUtils.map(user,UserDto.class);
+    }
+
+    public void delete() throws InvalidInputException {
+        var user = getLoggedInUser();
+        authUserService.delete(user.getId());
+        userRepository.delete(user);
     }
 
     public User fetchByPrimaryPhoneNo(String phone) throws InvalidInputException {
